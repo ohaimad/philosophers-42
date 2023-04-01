@@ -6,13 +6,13 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/03/31 21:48:17 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/01 01:28:06 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-t_list	*last_of_us(t_list *lst)
+t_list	*ft_lst_last(t_list *lst)
 {
 	t_list	*head;
 
@@ -25,24 +25,55 @@ t_list	*last_of_us(t_list *lst)
 	return (head);
 }
 
-void    philos(t_data *data, int id)
+void    philos(t_data *data, t_tmp *tmp, int id)
 {
 	int i;
 
 	data->phil = NULL; 
 	i = 1;
 	while(id-- >= 1)
-    	ft_lstadd_back(&data->phil, ft_lstnew(i++));
-	last_of_us(data->phil)->next = data->phil;
+    	ft_lstadd_back(&data->phil, ft_lstnew(i++, tmp));
+	ft_lst_last(data->phil)->next = data->phil;
 }
 
-void	*test(void *p)
+void	*printing(void *p)
 {
-	t_data	*data;
+	t_list	*phil;
+	phil = (t_list *)p;
+	while (phil->tmp->is)
+	{
+		if (phil->id % 2)
+			usleep(1000);
+		pthread_mutex_lock(&phil->fork);
+		
+		pthread_mutex_lock(&phil->tmp->p);
+		printf ("philo %d has taken a fork\n", phil->id);
+		pthread_mutex_unlock(&phil->tmp->p);
+		
+		pthread_mutex_lock(&phil->next->fork);
+		
+		pthread_mutex_lock(&phil->tmp->p);
+		printf ("philo %d has taken a fork\n", phil->id);
+		pthread_mutex_unlock(&phil->tmp->p);
+		
+		pthread_mutex_lock(&phil->tmp->p);
+		printf ("philo %d is eating\n", phil->id);
+		pthread_mutex_unlock(&phil->tmp->p);
 
-	data = (t_data *)p;
-
-	printf ("anaaa %d\n", data->phil->id);
+		usleep(200 * 1000);
+		pthread_mutex_unlock(&phil->fork);
+		pthread_mutex_unlock(&phil->next->fork);
+		
+		pthread_mutex_lock(&phil->tmp->p);
+		printf ("philo %d is sleeping\n", phil->id);
+		pthread_mutex_unlock(&phil->tmp->p);
+		
+		usleep(200 * 1000);
+		
+		pthread_mutex_lock(&phil->tmp->p);
+		printf ("philo %d is thinking\n", phil->id);
+		pthread_mutex_unlock(&phil->tmp->p);
+	}
 	return(NULL);
 }
 
@@ -53,8 +84,7 @@ void	philo_pro_max(t_data *data)
 	i = 0;
 	while (i < data->philo_nb)
 	{
-		pthread_create(&data->thr[i], NULL, test, data);
-		pthread_join(data->thr[i], NULL);
+		pthread_create(&data->thr[i], NULL, printing, data->phil);
 		data->phil = data->phil->next;
 		i++;
 	}
@@ -81,23 +111,19 @@ int	fill_data(t_data *data, int ac, char **av)
 int main(int ac, char **av)
 {
 	t_data	data;
+	t_tmp	tmp;
 
+	tmp.is = 1;
 	if (ac == 5 || ac == 6)
 	{
 		if (fill_data(&data, ac - 1, av + 1))
 			return (printf("Bad argument\n"), 1);
-		philos(&data, ft_atoi(av[1]));
+		philos(&data, &tmp, ft_atoi(av[1]));
 		philo_pro_max(&data);
-		// while (data.phil)
-		// {
-		// 	printf("----->%d\n", data.phil->id);
-		// 	data.phil = data.phil->next;
-		// }
-		// printf("%ld\n", data.philo_nb); 
-		// printf("%ld\n", data.time_to_die);
-		// printf("%ld\n", data.time_to_eat);
-		// printf("%ld\n", data.time_to_sleep);
-		// printf("%ld\n", data.philo_must_eat);
+		int i = 0;
+
+		while(data.thr[i])
+			pthread_join(data.thr[i++], NULL);
 	}
 	else
 		return (printf("Bad argument\n"), 1);

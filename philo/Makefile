@@ -17,7 +17,6 @@ all: $(NAME)
 # bonus: $(NAME_BONUS)
 
 CC = cc
-PTHREAD = -pthread
 
 $(NAME) : $(OBJS)
 	$(CC) $(OBJS) -o $(NAME)
@@ -26,7 +25,7 @@ $(NAME) : $(OBJS)
 # 	$(CC) $(OBJS_BONUS) -o $(NAME_BONUS)
 
 %.o : %.c $(HEADER)
-	$(CC) $(CFLAGS) $(PTHREAD) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJS) $(OBJS_BONUS)
