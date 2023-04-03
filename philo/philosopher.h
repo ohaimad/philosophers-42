@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/01 01:26:04 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/03 20:31:52 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,26 @@
 # include <string.h>
 # include <unistd.h>
 # include <pthread.h>
+#include <sys/time.h>
+
+struct  s_data;
 
 typedef struct tmp
 {
     pthread_mutex_t p;
     int	    is;
 }   t_tmp;
+
 typedef struct s_list
 {
     struct s_list *next;
     int id;
+    long long start_time;
     pthread_mutex_t fork;
     t_tmp   *tmp;
+    struct s_data *data;
 }   t_list;
+
 typedef struct s_data
 {
     t_list *phil;
@@ -43,6 +50,7 @@ typedef struct s_data
     long time_to_sleep;
     long philo_nb;
     long philo_must_eat;
+    long long start_time;
     pthread_t thr[1000];
 }   t_data;
 
@@ -57,5 +65,5 @@ void    philos(t_data *data, t_tmp *tmp, int id);
 void	*printing(void *p);
 void	philo_pro_max(t_data *data);
 int	    fill_data(t_data *data, int ac, char **av);
-
+long long current_time_ms();
 #endif

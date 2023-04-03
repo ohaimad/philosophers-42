@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/01 01:28:06 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/03 20:28:36 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,42 +36,51 @@ void    philos(t_data *data, t_tmp *tmp, int id)
 	ft_lst_last(data->phil)->next = data->phil;
 }
 
+long long current_time_ms()
+{
+    struct timeval tv;
+
+    gettimeofday(&tv, NULL);
+    return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
 void	*printing(void *p)
 {
 	t_list	*phil;
 	phil = (t_list *)p;
+
 	while (phil->tmp->is)
 	{
 		if (phil->id % 2)
 			usleep(1000);
 		pthread_mutex_lock(&phil->fork);
-		
+
 		pthread_mutex_lock(&phil->tmp->p);
-		printf ("philo %d has taken a fork\n", phil->id);
+		printf ("%lld %d has taken a fork\n", current_time_ms() - phil->start_time ,phil->id);
 		pthread_mutex_unlock(&phil->tmp->p);
-		
+
 		pthread_mutex_lock(&phil->next->fork);
-		
+
 		pthread_mutex_lock(&phil->tmp->p);
-		printf ("philo %d has taken a fork\n", phil->id);
+		printf ("%lld %d has taken a fork\n", current_time_ms() - phil->start_time, phil->id);
 		pthread_mutex_unlock(&phil->tmp->p);
-		
+
 		pthread_mutex_lock(&phil->tmp->p);
-		printf ("philo %d is eating\n", phil->id);
+		printf ("%lld %d is eating\n",current_time_ms() - phil->start_time, phil->id);
 		pthread_mutex_unlock(&phil->tmp->p);
 
 		usleep(200 * 1000);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
-		
+
 		pthread_mutex_lock(&phil->tmp->p);
-		printf ("philo %d is sleeping\n", phil->id);
+
+		printf ("%lld %d is sleeping\n",current_time_ms() - phil->start_time,  phil->id);
 		pthread_mutex_unlock(&phil->tmp->p);
-		
+
 		usleep(200 * 1000);
-		
+
 		pthread_mutex_lock(&phil->tmp->p);
-		printf ("philo %d is thinking\n", phil->id);
+		printf ("%lld %d is thinking\n",current_time_ms() - phil->start_time, phil->id);
 		pthread_mutex_unlock(&phil->tmp->p);
 	}
 	return(NULL);
@@ -116,12 +125,11 @@ int main(int ac, char **av)
 	tmp.is = 1;
 	if (ac == 5 || ac == 6)
 	{
+		int i = 0;
 		if (fill_data(&data, ac - 1, av + 1))
 			return (printf("Bad argument\n"), 1);
 		philos(&data, &tmp, ft_atoi(av[1]));
 		philo_pro_max(&data);
-		int i = 0;
-
 		while(data.thr[i])
 			pthread_join(data.thr[i++], NULL);
 	}

@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 20:06:15 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/01 01:08:31 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/03 20:26:49 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_list	*ft_lstnew(int id, t_tmp *tmp)
 		return (NULL);
 	philo->id = id;
 	philo->tmp = tmp;
+	philo->start_time = current_time_ms();
 	philo->fork = fork;
 	philo->next = NULL;
 	return (philo);
