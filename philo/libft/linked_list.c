@@ -6,13 +6,13 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 20:06:15 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/03 20:26:49 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/04 00:35:53 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosopher.h"
 
-t_list	*ft_lstnew(int id, t_tmp *tmp)
+t_list	*ft_lstnew(int id, t_data *data)
 {
 	t_list	*philo;
     pthread_mutex_t fork;
@@ -22,7 +22,7 @@ t_list	*ft_lstnew(int id, t_tmp *tmp)
 	if (!philo)
 		return (NULL);
 	philo->id = id;
-	philo->tmp = tmp;
+	philo->data = data;
 	philo->start_time = current_time_ms();
 	philo->fork = fork;
 	philo->next = NULL;
