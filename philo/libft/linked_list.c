@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 20:06:15 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/04 00:35:53 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/06 20:42:43 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_list	*ft_lstnew(int id, t_data *data)
 	philo->id = id;
 	philo->data = data;
 	philo->start_time = current_time_ms();
+	philo->last_meal = current_time_ms();
 	philo->fork = fork;
 	philo->next = NULL;
 	return (philo);

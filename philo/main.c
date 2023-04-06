@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/04 00:40:28 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/06 20:49:31 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,21 @@ void	*printing(void *p)
 		pthread_mutex_lock(&phil->fork);
 
 		pthread_mutex_lock(&phil->data->p);
-		printf ("%lld %d has taken a fork\n", current_time_ms() - phil->start_time ,phil->id);
+		if (phil->data->is)
+			printf ("%lld %d has taken a fork\n", current_time_ms() - phil->start_time ,phil->id);
 		pthread_mutex_unlock(&phil->data->p);
 
 		pthread_mutex_lock(&phil->next->fork);
 
 		pthread_mutex_lock(&phil->data->p);
-		printf ("%lld %d has taken a fork\n", current_time_ms() - phil->start_time, phil->id);
+		if (phil->data->is)
+			printf ("%lld %d has taken a fork\n", current_time_ms() - phil->start_time, phil->id);
 		pthread_mutex_unlock(&phil->data->p);
-
 		pthread_mutex_lock(&phil->data->p);
-		printf ("%lld %d is eating\n",current_time_ms() - phil->start_time, phil->id);
+		if (phil->data->is)
+			printf ("%lld %d is eating\n", current_time_ms() - phil->start_time, phil->id);
+		phil->last_meal = current_time_ms();
+
 		pthread_mutex_unlock(&phil->data->p);
 
 		my_usleep(phil->data->time_to_eat);
@@ -82,18 +86,34 @@ void	*printing(void *p)
 
 		pthread_mutex_lock(&phil->data->p);
 
-		printf ("%lld %d is sleeping\n",current_time_ms() - phil->start_time,  phil->id);
+		if (phil->data->is)
+			printf ("%lld %d is sleeping\n",current_time_ms() - phil->start_time,  phil->id);
 		pthread_mutex_unlock(&phil->data->p);
 
 		my_usleep(phil->data->time_to_sleep);
-
 		pthread_mutex_lock(&phil->data->p);
-		printf ("%lld %d is thinking\n",current_time_ms() - phil->start_time, phil->id);
+		if (phil->data->is)
+			printf ("%lld %d is thinking\n",current_time_ms() - phil->start_time, phil->id);
 		pthread_mutex_unlock(&phil->data->p);
 	}
 	return(NULL);
 }
 
+void	check_death(t_list *phil)
+{
+	
+	while (1)
+	{
+		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
+		{
+			pthread_mutex_lock(&phil->data->p);
+			printf ("%lld %d is dead\n", current_time_ms() - phil->start_time, phil->id);
+			pthread_mutex_unlock(&phil->data->p);
+			phil->data->is = 0;
+			break;
+		}
+	}
+}
 void	philo_pro_max(t_data *data)
 {
 	int i;
@@ -131,6 +151,7 @@ int main(int ac, char **av)
 
 	data.is = 1;
 	pthread_mutex_init(&data.p, NULL);
+	// ft_design();
 	if (ac == 5 || ac == 6)
 	{
 		int i = 0;
@@ -138,8 +159,9 @@ int main(int ac, char **av)
 			return (printf("Bad argument\n"), 1);
 		philos(&data, ft_atoi(av[1]));
 		philo_pro_max(&data);
+		check_death(data.phil);
 		while(data.thr[i])
-			pthread_join(data.thr[i++], NULL);
+			pthread_detach(data.thr[i++]);
 	}
 	else
 		return (printf("Bad argument\n"), 1);

@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/04 00:39:35 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/06 20:25:21 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_list
     struct s_list *next;
     int id;
     long long start_time;
+    long long last_meal;
     pthread_mutex_t fork;
     struct s_data *data;
 }   t_list;
@@ -45,7 +46,7 @@ typedef struct s_data
     long time_to_sleep;
     long philo_nb;
     long philo_must_eat;
-    long long start_time;
+    // long long start_time;
     pthread_t thr[1000];
 }   t_data;
 
@@ -61,4 +62,5 @@ void	*printing(void *p);
 void	philo_pro_max(t_data *data);
 int	    fill_data(t_data *data, int ac, char **av);
 long long current_time_ms();
+void	ft_design();
 #endif
