@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/06 22:02:25 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/06 22:11:41 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,14 @@ void	*printing(void *p)
 			printf("%lld %d has taken a fork\n", current_time_ms()
 					- phil->start_time, phil->id);
 		pthread_mutex_unlock(&phil->data->p);
-		
 		pthread_mutex_lock(&phil->data->eat);
 		phil->last_meal = current_time_ms();
 		pthread_mutex_unlock(&phil->data->eat);
-		
 		pthread_mutex_lock(&phil->data->p);
 		if (phil->data->is)
 			printf("%lld %d is eating\n", current_time_ms() - phil->start_time,
 					phil->id);
 		pthread_mutex_unlock(&phil->data->p);
-
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
@@ -107,7 +104,7 @@ void	check_death(t_list *phil)
 		pthread_mutex_lock(&phil->data->eat);
 		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
 		{
-			pthread_mutex_unlock(&phil->data->eat);
+			pthread_mutex_lock(&phil->data->p);
 			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
 					phil->id);
 			phil->data->is = 0;
@@ -126,6 +123,12 @@ void	philo_pro_max(t_data *data)
 	{
 		pthread_create(&data->thr[i], NULL, printing, data->phil);
 		data->phil = data->phil->next;
+		i++;
+	}
+	i = 0;
+	while (i < data->philo_nb)
+	{
+		pthread_detach(data->thr[i]);
 		i++;
 	}
 }
