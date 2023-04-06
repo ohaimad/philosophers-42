@@ -1,7 +1,7 @@
 NAME = philo
 # NAME_BONUS =
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror 
 
 SRCS = main.c libft/linked_list.c libft/fonctions.c
 # SRCS_BONUS =

@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/06 20:25:21 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/06 21:45:45 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ typedef struct s_data
 	int		res;
 	int		is;
     pthread_mutex_t p;
+    pthread_mutex_t eat;
     long time_to_die;
     long time_to_eat;
     long time_to_sleep;
     long philo_nb;
     long philo_must_eat;
-    // long long start_time;
     pthread_t thr[1000];
 }   t_data;
 
