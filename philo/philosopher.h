@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/06 21:45:45 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/08 01:02:24 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@ typedef struct s_list
 
 typedef struct s_data
 {
-    t_list *phil;
     int		signe;
 	int		res;
 	int		is;
-    pthread_mutex_t p;
-    pthread_mutex_t eat;
     long time_to_die;
     long time_to_eat;
     long time_to_sleep;
     long philo_nb;
     long philo_must_eat;
+    t_list *phil;
+    pthread_mutex_t p;
+    pthread_mutex_t eat;
     pthread_t thr[1000];
 }   t_data;
 
@@ -57,9 +57,9 @@ t_list	*ft_lstnew(int id, t_data *data);
 void	ft_lstclear(t_list **lst);
 int	    ft_atoi(char *str);
 t_list	*ft_lst_last(t_list *lst);
-void    philos(t_data *data, int id);
-void	*printing(void *p);
-void	philo_pro_max(t_data *data);
+void	philos(t_data *data, int id);
+void	*rootine(void *p);
+void	creat_philos(t_data *data);
 int	    fill_data(t_data *data, int ac, char **av);
 long long current_time_ms();
 void	ft_design();

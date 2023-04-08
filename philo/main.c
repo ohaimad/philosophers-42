@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/06 22:11:41 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/08 01:02:36 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	my_usleep(long long ms)
 	while (current_time_ms() - bg < ms)
 		usleep(100);
 }
-void	*printing(void *p)
+void	*rootine(void *p)
 {
 	t_list	*phil;
 
@@ -114,14 +114,14 @@ void	check_death(t_list *phil)
 		phil = phil->next;
 	}
 }
-void	philo_pro_max(t_data *data)
+void	creat_philos(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->philo_nb)
 	{
-		pthread_create(&data->thr[i], NULL, printing, data->phil);
+		pthread_create(&data->thr[i], NULL, rootine, data->phil);
 		data->phil = data->phil->next;
 		i++;
 	}
@@ -166,7 +166,7 @@ int	main(int ac, char **av)
 		if (fill_data(&data, ac - 1, av + 1))
 			return (printf("Bad argument\n"), 1);
 		philos(&data, ft_atoi(av[1]));
-		philo_pro_max(&data);
+		creat_philos(&data);
 		check_death(data.phil);
 		while (data.thr[i])
 			pthread_detach(data.thr[i++]);
