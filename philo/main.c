@@ -6,23 +6,11 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/08 01:02:36 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/09 07:00:27 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
-
-t_list	*ft_lst_last(t_list *lst)
-{
-	t_list	*head;
-
-	head = lst;
-	if (!head)
-		return (NULL);
-	while (head->next)
-		head = head->next;
-	return (head);
-}
 
 void	philos(t_data *data, int id)
 {
@@ -50,6 +38,14 @@ void	my_usleep(long long ms)
 	while (current_time_ms() - bg < ms)
 		usleep(100);
 }
+void	print_action(t_list *phil, char *action)
+{
+	pthread_mutex_lock(&phil->data->p);
+	if (phil->data->is)
+		printf("%lld %d %s\n", current_time_ms() - phil->start_time, phil->id,
+				action);
+	pthread_mutex_unlock(&phil->data->p);
+}
 void	*rootine(void *p)
 {
 	t_list	*phil;
@@ -60,39 +56,19 @@ void	*rootine(void *p)
 		if (phil->id % 2)
 			usleep(100);
 		pthread_mutex_lock(&phil->fork);
-		pthread_mutex_lock(&phil->data->p);
-		if (phil->data->is)
-			printf("%lld %d has taken a fork\n", current_time_ms()
-					- phil->start_time, phil->id);
-		pthread_mutex_unlock(&phil->data->p);
+		print_action(phil, "has taken a fork");
 		pthread_mutex_lock(&phil->next->fork);
-		pthread_mutex_lock(&phil->data->p);
-		if (phil->data->is)
-			printf("%lld %d has taken a fork\n", current_time_ms()
-					- phil->start_time, phil->id);
-		pthread_mutex_unlock(&phil->data->p);
+		print_action(phil, "has taken a fork");
 		pthread_mutex_lock(&phil->data->eat);
 		phil->last_meal = current_time_ms();
 		pthread_mutex_unlock(&phil->data->eat);
-		pthread_mutex_lock(&phil->data->p);
-		if (phil->data->is)
-			printf("%lld %d is eating\n", current_time_ms() - phil->start_time,
-					phil->id);
-		pthread_mutex_unlock(&phil->data->p);
+		print_action(phil, "is eating");
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
-		pthread_mutex_lock(&phil->data->p);
-		if (phil->data->is)
-			printf("%lld %d is sleeping\n", current_time_ms()
-					- phil->start_time, phil->id);
-		pthread_mutex_unlock(&phil->data->p);
+		print_action(phil, "is sleeping");
 		my_usleep(phil->data->time_to_sleep);
-		pthread_mutex_lock(&phil->data->p);
-		if (phil->data->is)
-			printf("%lld %d is thinking\n", current_time_ms()
-					- phil->start_time, phil->id);
-		pthread_mutex_unlock(&phil->data->p);
+		print_action(phil, "is thinking");
 	}
 	return (NULL);
 }
@@ -145,7 +121,7 @@ int	fill_data(t_data *data, int ac, char **av)
 		if (data->philo_must_eat < 0)
 			return (1);
 	}
-	if (data->philo_nb < 0 || data->time_to_die < 0 || data->time_to_eat < 0
+	if (data->philo_nb <= 0 || data->time_to_die < 0 || data->time_to_eat < 0
 		|| data->time_to_sleep < 0)
 		return (1);
 	return (0);

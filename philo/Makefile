@@ -3,7 +3,7 @@ NAME = philo
 
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRCS = main.c libft/linked_list.c libft/fonctions.c
+SRCS = main.c src/linked_list.c src/fonctions.c
 # SRCS_BONUS =
 
 OBJS = $(SRCS:.c=.o)

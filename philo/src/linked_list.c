@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 20:06:15 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/08 00:59:27 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/09 06:58:55 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 t_list	*ft_lstnew(int id, t_data *data)
 {
-	t_list	*philo;
-    pthread_mutex_t fork;
-    
-    pthread_mutex_init(&fork, NULL);
+	t_list			*philo;
+	pthread_mutex_t	fork;
+
+	pthread_mutex_init(&fork, NULL);
 	philo = malloc(sizeof(t_list));
 	if (!philo)
 		return (NULL);
@@ -47,7 +47,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 }
 
 void	ft_lstadd_front(t_list **lst, t_list *new)
-{	
+{
 	if (lst && new)
 	{
 		new->next = *lst;
