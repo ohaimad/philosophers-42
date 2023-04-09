@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 20:06:15 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 06:58:55 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/09 09:11:01 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_list	*ft_lstnew(int id, t_data *data)
 	philo->next = NULL;
 	return (philo);
 }
+
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*head;

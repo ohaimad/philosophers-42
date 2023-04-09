@@ -6,39 +6,12 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 06:58:50 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/09 09:12:26 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosopher.h"
 
-int	ft_atoi(char *str)
-{
-	int	i;
-	int	signe;
-	int	res;
-
-	res = 0;
-	signe = 1;
-	i = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			signe *= -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9' && str[i] != '\0')
-	{
-		res = res * 10;
-		res = res + str[i] - '0';
-		i++;
-	}
-	if ((res * signe) > 2147483647 || (res * signe) < -2147483648)
-		return (1);
-	return (res * signe);
-}
 void	ft_design(void)
 {
 	printf("\033[1;31m");
@@ -50,6 +23,7 @@ void	ft_design(void)
 	printf("\\_|   \\_| |_/\\___/\\_____/\\___/ \n\n");
 	printf("\033[0m");
 }
+
 t_list	*ft_lst_last(t_list *lst)
 {
 	t_list	*head;
@@ -60,4 +34,52 @@ t_list	*ft_lst_last(t_list *lst)
 	while (head->next)
 		head = head->next;
 	return (head);
+}
+
+void	philos(t_data *data, int id)
+{
+	int	i;
+
+	data->phil = NULL;
+	i = 1;
+	while (id-- >= 1)
+		ft_lstadd_back(&data->phil, ft_lstnew(i++, data));
+	ft_lst_last(data->phil)->next = data->phil;
+}
+
+void	creat_philos(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->philo_nb)
+	{
+		pthread_create(&data->thr[i], NULL, rootine, data->phil);
+		data->phil = data->phil->next;
+		i++;
+	}
+	i = 0;
+	while (i < data->philo_nb)
+	{
+		pthread_detach(data->thr[i]);
+		i++;
+	}
+}
+
+int	fill_data(t_data *data, int ac, char **av)
+{
+	data->philo_nb = ft_atoi(av[0]);
+	data->time_to_die = ft_atoi(av[1]);
+	data->time_to_eat = ft_atoi(av[2]);
+	data->time_to_sleep = ft_atoi(av[3]);
+	if (ac == 5)
+	{
+		data->philo_must_eat = ft_atoi(av[4]);
+		if (data->philo_must_eat < 0)
+			return (1);
+	}
+	if (data->philo_nb <= 0 || data->time_to_die < 0 || data->time_to_eat < 0
+		|| data->time_to_sleep < 0)
+		return (1);
+	return (0);
 }

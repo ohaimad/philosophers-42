@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 06:59:13 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/09 09:09:19 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-struct s_data;
+struct	s_data;
 
 typedef struct s_list
 {
@@ -63,4 +63,5 @@ void				creat_philos(t_data *data);
 int					fill_data(t_data *data, int ac, char **av);
 long long			current_time_ms(void);
 void				ft_design(void);
+void				check_death(t_list *phil);
 #endif
