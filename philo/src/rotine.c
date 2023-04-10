@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/10 16:05:05 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/10 20:08:08 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,16 @@ void	print_action(t_list *phil, char *action)
 			action);
 	pthread_mutex_unlock(&phil->data->p);
 }
-void	ft_init(t_data *data)
-{
-	data->phil->nb_eat = 0;
-	data->check = 0;
-}
 
 void	*rootine(void *p)
 {
 	t_list	*phil;
 
 	phil = (t_list *)p;
-	ft_init(phil->data);
+	pthread_mutex_lock(&phil->data->luck);
 	while (phil->data->is)
 	{
+		pthread_mutex_unlock(&phil->data->luck);
 		if (phil->id % 2)
 			usleep(100);
 		pthread_mutex_lock(&phil->fork);
@@ -89,7 +85,9 @@ void	check_death(t_list *phil)
 			pthread_mutex_unlock(&phil->data->p);
 			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
 				phil->id);
+			pthread_mutex_lock(&phil->data->luck);
 			phil->data->is = 0;
+			pthread_mutex_unlock(&phil->data->luck);
 			break ;
 		}
 		if (phil->data->check == phil->data->philo_nb)

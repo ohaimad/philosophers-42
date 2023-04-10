@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 22:07:35 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/10 20:05:14 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_data
 	long			philo_must_eat;
 	t_list			*phil;
 	pthread_mutex_t	p;
+	pthread_mutex_t	luck;
 	pthread_mutex_t	eat;
 	pthread_t		thr[1000];
 }					t_data;
