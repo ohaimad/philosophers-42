@@ -1,7 +1,7 @@
 NAME = philo
 # NAME_BONUS =
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
 SRCS = main.c src/linked_list.c src/fonctions.c src/rotine.c src/fonctions2.c
 # SRCS_BONUS =

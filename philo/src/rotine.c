@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/10 00:09:33 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/10 15:38:06 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,20 @@ void	*rootine(void *p)
 		print_action(phil, "has taken a fork");
 		pthread_mutex_lock(&phil->next->fork);
 		print_action(phil, "has taken a fork");
-		pthread_mutex_lock(&phil->data->eat);
+		pthread_mutex_lock(&phil->data->p);
 		phil->last_meal = current_time_ms();
-		pthread_mutex_unlock(&phil->data->eat);
+		pthread_mutex_unlock(&phil->data->p);
 		print_action(phil, "is eating");
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
 		if (phil->data->optional == 1)
 		{
-			pthread_mutex_lock(&phil->data->eat);
+			pthread_mutex_lock(&phil->data->p);
 			phil->nb_eat++;
 			if (phil->nb_eat >= phil->data->philo_must_eat)
 					phil->data->check++;
-			pthread_mutex_unlock(&phil->data->eat);
+			pthread_mutex_unlock(&phil->data->p);
 		}
 		print_action(phil, "is sleeping");
 		my_usleep(phil->data->time_to_sleep);
@@ -83,10 +83,10 @@ void	check_death(t_list *phil)
 {
 	while (1)
 	{
-		pthread_mutex_lock(&phil->data->eat);
+		pthread_mutex_lock(&phil->data->p);
 		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
 		{
-			pthread_mutex_lock(&phil->data->p);
+			pthread_mutex_unlock(&phil->data->p);
 			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
 				phil->id);
 			phil->data->is = 0;
@@ -94,10 +94,11 @@ void	check_death(t_list *phil)
 		}
 		if(phil->data->check == phil->data->philo_nb)
 		{
+			pthread_mutex_unlock(&phil->data->p);
 			phil->data->is = 0;
-			break;;
+			break;
 		}
-		pthread_mutex_unlock(&phil->data->eat);
+		pthread_mutex_unlock(&phil->data->p);
 		phil = phil->next;
 	}
 }
