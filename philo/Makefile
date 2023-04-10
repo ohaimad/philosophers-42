@@ -19,7 +19,7 @@ all: $(NAME)
 CC = cc
 
 $(NAME) : $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) -g -o $(NAME)
 
 # $(NAME_BONUS) : $(OBJS_BONUS)
 # 	$(CC) $(OBJS_BONUS) -o $(NAME_BONUS)

@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 09:09:19 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/09 22:07:35 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_list
 {
 	struct s_list	*next;
 	int				id;
+	int				nb_eat;
 	long long		start_time;
 	long long		last_meal;
 	pthread_mutex_t	fork;
@@ -39,6 +40,8 @@ typedef struct s_data
 	int				signe;
 	int				res;
 	int				is;
+	int				optional;
+	int				check;
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
@@ -64,4 +67,5 @@ int					fill_data(t_data *data, int ac, char **av);
 long long			current_time_ms(void);
 void				ft_design(void);
 void				check_death(t_list *phil);
+void	optional_param(t_data *data, int optional);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 09:10:41 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/10 00:09:33 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,18 @@ void	print_action(t_list *phil, char *action)
 			action);
 	pthread_mutex_unlock(&phil->data->p);
 }
+void	ft_init(t_data *data)
+{
+	data->phil->nb_eat = 0;
+	data->check = 0;
+}
 
 void	*rootine(void *p)
 {
 	t_list	*phil;
 
 	phil = (t_list *)p;
+	ft_init(phil->data);
 	while (phil->data->is)
 	{
 		if (phil->id % 2)
@@ -58,6 +64,14 @@ void	*rootine(void *p)
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
+		if (phil->data->optional == 1)
+		{
+			pthread_mutex_lock(&phil->data->eat);
+			phil->nb_eat++;
+			if (phil->nb_eat >= phil->data->philo_must_eat)
+					phil->data->check++;
+			pthread_mutex_unlock(&phil->data->eat);
+		}
 		print_action(phil, "is sleeping");
 		my_usleep(phil->data->time_to_sleep);
 		print_action(phil, "is thinking");
@@ -77,6 +91,11 @@ void	check_death(t_list *phil)
 				phil->id);
 			phil->data->is = 0;
 			break ;
+		}
+		if(phil->data->check == phil->data->philo_nb)
+		{
+			phil->data->is = 0;
+			break;;
 		}
 		pthread_mutex_unlock(&phil->data->eat);
 		phil = phil->next;
