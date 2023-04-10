@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/10 15:49:15 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/10 16:05:05 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ void	check_death(t_list *phil)
 			phil->data->is = 0;
 			break ;
 		}
-		if(phil->data->check == phil->data->philo_nb)
+		if (phil->data->check == phil->data->philo_nb)
 		{
 			pthread_mutex_unlock(&phil->data->p);
 			phil->data->is = 0;
-			break;;
+			break;
 		}
 		pthread_mutex_unlock(&phil->data->p);
 		phil = phil->next;
