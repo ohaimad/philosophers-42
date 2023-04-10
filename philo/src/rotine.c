@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/10 15:38:06 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/10 15:49:15 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	check_death(t_list *phil)
 		{
 			pthread_mutex_unlock(&phil->data->p);
 			phil->data->is = 0;
-			break;
+			break;;
 		}
 		pthread_mutex_unlock(&phil->data->p);
 		phil = phil->next;

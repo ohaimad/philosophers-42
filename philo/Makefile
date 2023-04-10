@@ -1,7 +1,7 @@
 NAME = philo
 # NAME_BONUS =
 
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread
 
 SRCS = main.c src/linked_list.c src/fonctions.c src/rotine.c src/fonctions2.c
 # SRCS_BONUS =
@@ -19,7 +19,7 @@ all: $(NAME)
 CC = cc
 
 $(NAME) : $(OBJS)
-	$(CC) $(OBJS) -g -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 # $(NAME_BONUS) : $(OBJS_BONUS)
 # 	$(CC) $(OBJS_BONUS) -o $(NAME_BONUS)
