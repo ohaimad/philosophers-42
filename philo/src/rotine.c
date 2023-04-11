@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/11 01:58:58 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/11 17:53:19 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,81 +31,72 @@ void	my_usleep(long long ms)
 
 void	print_action(t_list *phil, char *action)
 {
-	pthread_mutex_lock(&o);
+	pthread_mutex_lock(&phil->data->luck);
 	if (phil->data->is)
 		printf("%lld %d %s\n", current_time_ms() - phil->start_time, phil->id,
-				action);
-	pthread_mutex_unlock(&o);
+			action);
+	pthread_mutex_unlock(&phil->data->luck);
 }
 
 void	*rootine(void *p)
 {
-	t_list			*phil;
-	pthread_mutex_t	o;
+	t_list	*phil;
 
-	pthread_mutex_init(&o, NULL);
 	phil = (t_list *)p;
 	while (1)
 	{
-		pthread_mutex_lock(&o);
+		pthread_mutex_lock(&phil->data->luck);
 		if (!phil->data->is)
 			break ;
-		pthread_mutex_unlock(&o);
+		pthread_mutex_unlock(&phil->data->luck);
 		if (phil->id % 2)
 			usleep(100);
 		pthread_mutex_lock(&phil->fork);
 		print_action(phil, "has taken a fork");
 		pthread_mutex_lock(&phil->next->fork);
 		print_action(phil, "has taken a fork");
-		pthread_mutex_lock(&phil->data->p);
+		pthread_mutex_lock(&phil->data->luck);
 		phil->last_meal = current_time_ms();
-		pthread_mutex_unlock(&phil->data->p);
+		pthread_mutex_unlock(&phil->data->luck);
 		print_action(phil, "is eating");
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
 		if (phil->data->optional == 1)
 		{
-			pthread_mutex_lock(&phil->data->p);
+			pthread_mutex_lock(&phil->data->luck);
 			phil->nb_eat++;
 			if (phil->nb_eat >= phil->data->philo_must_eat)
-				phil->data->check++;
-			pthread_mutex_unlock(&phil->data->p);
+					phil->data->check++;
+			pthread_mutex_unlock(&phil->data->luck);
 		}
 		print_action(phil, "is sleeping");
 		my_usleep(phil->data->time_to_sleep);
-			pthread_mutex_lock(&o);
 		print_action(phil, "is thinking");
-			pthread_mutex_unlock(&o);
 	}
 	return (NULL);
 }
 
 void	check_death(t_list *phil)
 {
-
 	while (1)
 	{
-		pthread_mutex_lock(&phil->data->p);
+		pthread_mutex_lock(&phil->data->luck);
 		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
 		{
-			pthread_mutex_unlock(&phil->data->p);
 			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
-					phil->id);
-			pthread_mutex_lock(&o);
+				phil->id);
 			phil->data->is = 0;
-			pthread_mutex_unlock(&o);
 			break ;
 		}
-		
+		pthread_mutex_unlock(&phil->data->luck);
+		pthread_mutex_lock(&phil->data->luck);
 		if (phil->data->check == phil->data->philo_nb)
-		{  
-			pthread_mutex_lock(&o);
+		{
 			phil->data->is = 0;
-			pthread_mutex_unlock(&o);
-			break ;
+			break;
 		}
-		pthread_mutex_unlock(&phil->data->p);
+		pthread_mutex_unlock(&phil->data->luck);
 		phil = phil->next;
 	}
 }
