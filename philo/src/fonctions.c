@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 21:39:17 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/11 22:35:31 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ void	creat_philos(t_data *data)
 	{
 		pthread_create(&data->thr[i], NULL, rootine, data->phil);
 		data->phil = data->phil->next;
-		i++;
-	}
-	i = 0;
-	while (i < data->philo_nb)
-	{
 		pthread_detach(data->thr[i]);
 		i++;
 	}
+	// i = 0;
+	// while (i < data->philo_nb)
+	// {
+	// 	i++;
+	// }
 }
 
 int	fill_data(t_data *data, int ac, char **av)
