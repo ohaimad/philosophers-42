@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/10 20:05:26 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/11 01:51:48 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ int	main(int ac, char **av)
 	
 	data.is = 1;
 	data.check = 0;
+	pthread_mutex_init(&o, NULL);
 	pthread_mutex_init(&data.p, NULL);
-	pthread_mutex_init(&data.eat, NULL);
 	pthread_mutex_init(&data.luck, NULL);
+	pthread_mutex_init(&data.eat, NULL);
 	ft_design();
 	if (ac == 5 || ac == 6)
 	{
