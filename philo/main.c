@@ -6,38 +6,11 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 16:37:14 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 16:59:15 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
-
-void	ft_destroy(t_list *phil)
-{
-	pthread_mutex_destroy(&phil->data->p);
-	pthread_mutex_destroy(&phil->data->eat);
-	pthread_mutex_destroy(&phil->data->luck);
-}
-
-int check_digit(int ac, char **av)
-{
-	int i = 1;
-	int j = 0;
-	if (ac < 5 && ac > 6)
-		return(-1);
-	while(av[i])
-	{
-		j = 0;
-		while(av[i][j])
-		{
-			if(!(av[i][j] >= '0' && av[i][j] <= '9'))
-				return(-1);
-			j++;
-		}
-		i++;
-	}
-	return(0);
-}
 
 int	main(int ac, char **av)
 {

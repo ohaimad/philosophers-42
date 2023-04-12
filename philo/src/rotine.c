@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 02:39:44 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 17:11:43 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@ long long	current_time_ms(void)
 
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-void	my_usleep(long long ms)
-{
-	long long	bg;
-
-	bg = current_time_ms();
-	while (current_time_ms() - bg < ms)
-		usleep(100);
 }
 
 void	print_action(t_list *phil, char *action)
@@ -50,6 +41,14 @@ void	check_optional(t_list *phil)
 	}
 }
 
+void	pick_up_forks(t_list *phil)
+{
+	pthread_mutex_lock(&phil->fork);
+	print_action(phil, "has taken a fork");
+	pthread_mutex_lock(&phil->next->fork);
+	print_action(phil, "has taken a fork");
+}
+
 void	*rootine(void *p)
 {
 	t_list	*phil;
@@ -63,10 +62,7 @@ void	*rootine(void *p)
 		pthread_mutex_unlock(&phil->data->luck);
 		if (phil->id % 2)
 			usleep(100);
-		pthread_mutex_lock(&phil->fork);
-		print_action(phil, "has taken a fork");
-		pthread_mutex_lock(&phil->next->fork);
-		print_action(phil, "has taken a fork");
+		pick_up_forks(phil);
 		pthread_mutex_lock(&phil->data->luck);
 		phil->last_meal = current_time_ms();
 		pthread_mutex_unlock(&phil->data->luck);

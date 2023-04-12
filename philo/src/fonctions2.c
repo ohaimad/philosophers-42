@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:11:25 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 16:16:48 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 17:12:18 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	ft_atoi(char *str)
 			signe *= -1;
 		i++;
 	}
-	if(!(str[i] >= '0' && str[i] <= '9'))
-		return(-1);
 	while (str[i] >= '0' && str[i] <= '9' && str[i] != '\0')
 	{
 		res = res * 10;
@@ -64,4 +62,43 @@ void	check_death(t_list *phil)
 		pthread_mutex_unlock(&phil->data->luck);
 		phil = phil->next;
 	}
+}
+
+void	ft_destroy(t_list *phil)
+{
+	pthread_mutex_destroy(&phil->data->p);
+	pthread_mutex_destroy(&phil->data->eat);
+	pthread_mutex_destroy(&phil->data->luck);
+}
+
+int	check_digit(int ac, char **av)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	j = 0;
+	if (ac < 5 && ac > 6)
+		return (-1);
+	while (av[i])
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (!(av[i][j] >= '0' && av[i][j] <= '9'))
+				return (-1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	my_usleep(long long ms)
+{
+	long long	bg;
+
+	bg = current_time_ms();
+	while (current_time_ms() - bg < ms)
+		usleep(100);
 }
