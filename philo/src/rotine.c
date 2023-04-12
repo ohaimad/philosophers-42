@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/11 17:53:19 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 02:39:44 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ void	print_action(t_list *phil, char *action)
 	pthread_mutex_unlock(&phil->data->luck);
 }
 
+void	check_optional(t_list *phil)
+{
+	if (phil->data->optional == 1)
+	{
+		pthread_mutex_lock(&phil->data->luck);
+		phil->nb_eat++;
+		if (phil->nb_eat >= phil->data->philo_must_eat)
+			phil->data->check++;
+		pthread_mutex_unlock(&phil->data->luck);
+	}
+}
+
 void	*rootine(void *p)
 {
 	t_list	*phil;
@@ -62,41 +74,10 @@ void	*rootine(void *p)
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
-		if (phil->data->optional == 1)
-		{
-			pthread_mutex_lock(&phil->data->luck);
-			phil->nb_eat++;
-			if (phil->nb_eat >= phil->data->philo_must_eat)
-					phil->data->check++;
-			pthread_mutex_unlock(&phil->data->luck);
-		}
+		check_optional(phil);
 		print_action(phil, "is sleeping");
 		my_usleep(phil->data->time_to_sleep);
 		print_action(phil, "is thinking");
 	}
 	return (NULL);
-}
-
-void	check_death(t_list *phil)
-{
-	while (1)
-	{
-		pthread_mutex_lock(&phil->data->luck);
-		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
-		{
-			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
-				phil->id);
-			phil->data->is = 0;
-			break ;
-		}
-		pthread_mutex_unlock(&phil->data->luck);
-		pthread_mutex_lock(&phil->data->luck);
-		if (phil->data->check == phil->data->philo_nb)
-		{
-			phil->data->is = 0;
-			break;
-		}
-		pthread_mutex_unlock(&phil->data->luck);
-		phil = phil->next;
-	}
 }

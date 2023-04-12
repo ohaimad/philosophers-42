@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/11 22:35:31 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 04:58:47 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,6 @@ void	creat_philos(t_data *data)
 		pthread_detach(data->thr[i]);
 		i++;
 	}
-	// i = 0;
-	// while (i < data->philo_nb)
-	// {
-	// 	i++;
-	// }
 }
 
 int	fill_data(t_data *data, int ac, char **av)
@@ -77,11 +72,11 @@ int	fill_data(t_data *data, int ac, char **av)
 	{
 		data->optional = 1;
 		data->philo_must_eat = ft_atoi(av[4]);
-		if (data->philo_must_eat < 0)
+		if (data->philo_must_eat <= 0)
 			return (1);
 	}
-	if (data->philo_nb <= 0 || data->time_to_die < 0 || data->time_to_eat < 0
-		|| data->time_to_sleep < 0)
+	if (data->philo_nb <= 0 || data->time_to_die <= 0 || data->time_to_eat <= 0
+		|| data->time_to_sleep <= 0)
 		return (1);
 	return (0);
 }

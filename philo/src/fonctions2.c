@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:11:25 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/09 09:12:17 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 04:53:36 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,30 @@ int	ft_atoi(char *str)
 		i++;
 	}
 	if ((res * signe) > 2147483647 || (res * signe) < -2147483648)
-		return (1);
+		return (-1);
 	return (res * signe);
+}
+
+void	check_death(t_list *phil)
+{
+	while (1)
+	{
+		pthread_mutex_lock(&phil->data->luck);
+		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
+		{
+			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
+				phil->id);
+			phil->data->is = 0;
+			break ;
+		}
+		pthread_mutex_unlock(&phil->data->luck);
+		pthread_mutex_lock(&phil->data->luck);
+		if (phil->data->check == phil->data->philo_nb)
+		{
+			phil->data->is = 0;
+			break ;
+		}
+		pthread_mutex_unlock(&phil->data->luck);
+		phil = phil->next;
+	}
 }

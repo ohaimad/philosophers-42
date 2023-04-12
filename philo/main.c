@@ -6,29 +6,24 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/11 23:15:11 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/04/12 00:47:50 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-void ft_destroy(t_list *phil)
-{	
+void	ft_destroy(t_list *phil)
+{
 	pthread_mutex_destroy(&phil->data->p);
 	pthread_mutex_destroy(&phil->data->eat);
 	pthread_mutex_destroy(&phil->data->luck);
-}
-void f()
-{
-	system("leaks philo");
 }
 
 int	main(int ac, char **av)
 {
 	t_data	data;
 	int		i;
-	
-	atexit(f);
+
 	data.is = 1;
 	data.check = 0;
 	pthread_mutex_init(&data.p, NULL);
