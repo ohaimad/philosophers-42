@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 17:11:43 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/02 20:33:21 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	check_optional(t_list *phil)
 	{
 		pthread_mutex_lock(&phil->data->luck);
 		phil->nb_eat++;
-		if (phil->nb_eat >= phil->data->philo_must_eat)
+		if (phil->nb_eat == phil->data->philo_must_eat)
 			phil->data->check++;
 		pthread_mutex_unlock(&phil->data->luck);
 	}
