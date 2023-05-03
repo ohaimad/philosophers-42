@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:55:41 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 16:59:15 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/03 12:08:08 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char **av)
 	data.is = 1;
 	data.check = 0;
 	i = 0;
-	ft_design();
+	// ft_design();
 	if (check_digit(ac, av))
 		return (printf("Bad argument\n"), 1);
 	pthread_mutex_init(&data.p, NULL);
@@ -30,7 +30,7 @@ int	main(int ac, char **av)
 		return (printf("Bad argument\n"), 1);
 	philos(&data, ft_atoi(av[1]));
 	creat_philos(&data);
-	check_death(data.phil);
+	// check_death(data.phil);
 	ft_destroy(data.phil);
 	return (0);
 }

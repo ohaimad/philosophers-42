@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 17:09:41 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/03 12:08:58 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	creat_philos(t_data *data)
 		pthread_detach(data->thr[i]);
 		i++;
 	}
+	check_death(data->phil);
 }
 
 int	fill_data(t_data *data, int ac, char **av)

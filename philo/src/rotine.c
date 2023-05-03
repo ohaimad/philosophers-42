@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/02 20:33:21 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/03 14:50:57 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,23 +54,23 @@ void	*rootine(void *p)
 	t_list	*phil;
 
 	phil = (t_list *)p;
+	if (phil->id % 2)
+		usleep (1000);
 	while (1)
 	{
 		pthread_mutex_lock(&phil->data->luck);
 		if (!phil->data->is)
 			break ;
 		pthread_mutex_unlock(&phil->data->luck);
-		if (phil->id % 2)
-			usleep(100);
 		pick_up_forks(phil);
 		pthread_mutex_lock(&phil->data->luck);
 		phil->last_meal = current_time_ms();
 		pthread_mutex_unlock(&phil->data->luck);
 		print_action(phil, "is eating");
+		check_optional(phil);
 		my_usleep(phil->data->time_to_eat);
 		pthread_mutex_unlock(&phil->fork);
 		pthread_mutex_unlock(&phil->next->fork);
-		check_optional(phil);
 		print_action(phil, "is sleeping");
 		my_usleep(phil->data->time_to_sleep);
 		print_action(phil, "is thinking");

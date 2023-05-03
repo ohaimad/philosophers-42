@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/04/12 17:12:06 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/03 10:36:47 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ void				check_death(t_list *phil);
 int					check_digit(int ac, char **av);
 void				ft_destroy(t_list *phil);
 void				my_usleep(long long ms);
+void				check_optional(t_list *phil);
 
 #endif

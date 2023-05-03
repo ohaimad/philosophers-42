@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:11:25 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/02 20:34:29 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/03 14:48:49 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	check_digit(int ac, char **av)
 	}
 	return (0);
 }
+
 
 void	my_usleep(long long ms)
 {
