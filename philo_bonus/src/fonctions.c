@@ -6,11 +6,11 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/03 18:13:50 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/05/29 19:28:35 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philosopher.h"
+#include "../philosopher_bonus.h"
 
 t_list	*ft_lst_last(t_list *lst)
 {
@@ -26,30 +26,53 @@ t_list	*ft_lst_last(t_list *lst)
 
 void	philos(t_data *data, int id)
 {
-	int	i;
+	int		i;
+	int		k;
+	sem_t	*my_semaphore;
 
+	k = id;
 	data->phil = NULL;
 	i = 1;
 	while (id-- >= 1)
 		ft_lstadd_back(&data->phil, ft_lstnew(i++, data));
 	ft_lst_last(data->phil)->next = data->phil;
+	sem_unlink("my_semaphore");
+	my_semaphore = sem_open("my_semaphore", O_CREAT, 0644, k);
+	while (k--)
+	{
+		data->phil->forks = my_semaphore;
+		data->phil = data->phil->next;
+	}
+	
 }
-
+// Mutex : mutual exclusion; a mutex is a lock that we can lock and unlock to protect a section of code from being accessed by multiple threads at once.
 void	creat_philos(t_data *data)
 {
-	int	i;
+	int		i;
+	pid_t	pid;
+	t_list	*phil;
 
 	i = 0;
+	phil = data->phil;
 	while (i < data->philo_nb)
 	{
-		pthread_create(&data->thr[i], NULL, rootine, data->phil);
-		data->phil = data->phil->next;
-		pthread_detach(data->thr[i]);
+		pid = fork();
+		if (pid < 0)
+			printf("Error\n");
+		else if (pid == 0)
+		{
+			// This is the child process representing philosopher i
+			rootine(phil);
+			exit(0);
+		}
+		phil = phil->next;
 		i++;
 	}
-	check_death(data->phil);
+	while (wait(NULL) != -1)
+		;
 }
 
+// while (wait(NULL) > 0);
 int	fill_data(t_data *data, int ac, char **av)
 {
 	data->optional = 0;

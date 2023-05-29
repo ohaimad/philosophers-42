@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosopher.h                                      :+:      :+:    :+:   */
+/*   philosopher_bonus.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/25 00:56:53 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/20 17:27:48 by ohaimad          ###   ########.fr       */
+/*   Created: 2023/05/29 17:15:47 by ohaimad           #+#    #+#             */
+/*   Updated: 2023/05/29 19:14:22 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHER_H
-# define PHILOSOPHER_H
+#ifndef PHILOSOPHER_BONUS_H
+# define PHILOSOPHER_BONUS_H
 
 # include <ctype.h>
 # include <fcntl.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
 
-struct	s_data;
+struct s_data;
 
 typedef struct s_list
 {
 	struct s_list	*next;
 	int				id;
+	sem_t			*forks;
 	int				nb_eat;
 	long long		start_time;
 	long long		last_meal;
@@ -37,6 +39,7 @@ typedef struct s_list
 
 typedef struct s_data
 {
+	int				signe;
 	int				res;
 	int				is;
 	int				optional;
