@@ -1,25 +1,18 @@
-NAME = philo
 NAME_BONUS = philo_b
 
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread
 
-SRCS = main.c src/linked_list.c src/fonctions.c src/rotine.c src/fonctions2.c
 SRCS_BONUS = main.c src/linked_list.c src/fonctions.c src/rotine.c src/fonctions2.c
-
-OBJS = $(SRCS:.c=.o)
 
 OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
 HEADER = philosopher.h
 
-all: $(NAME)
+all: $(NAME_BONUS)
 
 bonus: $(NAME_BONUS)
 
 CC = cc
-
-$(NAME) : $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 $(NAME_BONUS) : $(OBJS_BONUS)
 	$(CC) $(OBJS_BONUS) -o $(NAME_BONUS)
@@ -28,9 +21,9 @@ $(NAME_BONUS) : $(OBJS_BONUS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJS) $(OBJS_BONUS)
+	rm -rf  $(OBJS_BONUS)
 
 fclean: clean
-	rm -rf $(NAME) $(NAME_BONUS)
+	rm -rf  $(NAME_BONUS)
 
 re:  fclean all 
