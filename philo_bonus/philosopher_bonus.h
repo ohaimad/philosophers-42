@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 17:15:47 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/06/05 16:38:57 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/06/05 19:55:03 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void				*rootine(void *p);
 void				creat_philos(t_data *data);
 int					fill_data(t_data *data, int ac, char **av);
 long long			current_time_ms(void);
-void				ft_design(void);
 void				check_death(t_list *phil);
 int					check_digit(int ac, char **av);
 void				ft_destroy(t_list *phil);

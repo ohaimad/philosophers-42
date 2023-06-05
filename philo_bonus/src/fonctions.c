@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/06/05 17:09:51 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/06/05 19:38:50 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	philos(t_data *data, int id)
 		data->phil->my_print = my_print;
 		data->phil = data->phil->next;
 	}
-	
 }
 // Mutex : mutual exclusion; a mutex is a lock that we can lock and unlock to protect a section of code from being accessed by multiple threads at once.
 void	creat_philos(t_data *data)
@@ -69,7 +68,7 @@ void	creat_philos(t_data *data)
 			rootine(phil);
 			exit(0);
 		}
-		// else 
+		// else
 		// {
 		// 	kill(pid, SIGKILL);
 		// }
@@ -77,27 +76,26 @@ void	creat_philos(t_data *data)
 		i++;
 	}
 	i = 0;
-	
 	while (i < data->philo_nb)
-    {
-        waitpid(0 , &status, 0);
-            if (WEXITSTATUS(status) == 0)
-            {
-				phil = data->phil;
-				i = 0;
-				while(i < data->philo_nb)
-				{
-					kill(phil->pid, SIGKILL);
-					i++;
-					phil = phil	->next;
-				}
-				exit(0);
-            }
-        // }
-		phil = phil	->next;
+	{
+		waitpid(0, &status, 0);
+		if (WEXITSTATUS(status) == 0)
+		{
+			phil = data->phil;
+			i = 0;
+			while (i < data->philo_nb)
+			{
+				kill(phil->pid, SIGKILL);
+				i++;
+				phil = phil->next;
+			}
+			exit(0);
+		}
+		// }
+		phil = phil->next;
 		i++;
-    }
-    exit(0);	
+	}
+	exit(0);
 }
 
 // while (wait(NULL) > 0);

@@ -5,6 +5,9 @@
         "__config": "c",
         "philosopher.h": "c",
         "__locale": "c",
-        "locale": "c"
+        "locale": "c",
+        "__cxx_version": "c",
+        "__node_handle": "c",
+        "optional": "c"
     }
 }
