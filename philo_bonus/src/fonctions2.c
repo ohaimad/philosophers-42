@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:11:25 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/29 19:47:51 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/06/05 17:12:14 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,38 @@ int	check_digit(int ac, char **av)
 	return (0);
 }
 
-void	my_usleep(long long ms)
+void	my_usleep(long long ms, t_list *phil)
 {
 	long long	bg;
 
 	bg = current_time_ms();
 	while (current_time_ms() - bg < ms)
+	{
+		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
+		{
+			sem_wait(phil->my_print);
+			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
+				phil->id);
+			// sem_post(phil->my_print);
+			exit (0);
+		}
+		if (phil->data->check == phil->data->philo_nb)
+			exit (0);
 		usleep(100);
+	}
 }
+// void	check_death(t_list *phil)
+// {
+// 	while (1)
+// 	{
+// 		if ((current_time_ms() - phil->last_meal) > phil->data->time_to_die)
+// 		{
+// 			printf("%lld %d is dead\n", current_time_ms() - phil->start_time,
+// 				phil->id);
+// 			exit (0);
+// 		}
+// 		if (phil->data->check == phil->data->philo_nb)
+// 			exit (0);
+// 		phil = phil->next;
+// 	}
+// }

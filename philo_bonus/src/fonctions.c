@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 01:46:07 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/29 19:28:35 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/06/05 17:09:51 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	philos(t_data *data, int id)
 	int		i;
 	int		k;
 	sem_t	*my_semaphore;
+	sem_t	*my_print;
 
 	k = id;
 	data->phil = NULL;
@@ -38,9 +39,12 @@ void	philos(t_data *data, int id)
 	ft_lst_last(data->phil)->next = data->phil;
 	sem_unlink("my_semaphore");
 	my_semaphore = sem_open("my_semaphore", O_CREAT, 0644, k);
+	sem_unlink("my_print");
+	my_print = sem_open("my_print", O_CREAT, 0644, 1);
 	while (k--)
 	{
 		data->phil->forks = my_semaphore;
+		data->phil->my_print = my_print;
 		data->phil = data->phil->next;
 	}
 	
@@ -49,27 +53,51 @@ void	philos(t_data *data, int id)
 void	creat_philos(t_data *data)
 {
 	int		i;
-	pid_t	pid;
 	t_list	*phil;
+	int		status;
 
 	i = 0;
 	phil = data->phil;
 	while (i < data->philo_nb)
 	{
-		pid = fork();
-		if (pid < 0)
+		phil->pid = fork();
+		if (phil->pid < 0)
 			printf("Error\n");
-		else if (pid == 0)
+		else if (phil->pid == 0)
 		{
 			// This is the child process representing philosopher i
 			rootine(phil);
 			exit(0);
 		}
+		// else 
+		// {
+		// 	kill(pid, SIGKILL);
+		// }
 		phil = phil->next;
 		i++;
 	}
-	while (wait(NULL) != -1)
-		;
+	i = 0;
+	
+	while (i < data->philo_nb)
+    {
+        waitpid(0 , &status, 0);
+            if (WEXITSTATUS(status) == 0)
+            {
+				phil = data->phil;
+				i = 0;
+				while(i < data->philo_nb)
+				{
+					kill(phil->pid, SIGKILL);
+					i++;
+					phil = phil	->next;
+				}
+				exit(0);
+            }
+        // }
+		phil = phil	->next;
+		i++;
+    }
+    exit(0);	
 }
 
 // while (wait(NULL) > 0);

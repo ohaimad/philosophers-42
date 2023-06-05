@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 17:15:47 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/29 19:14:22 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/06/05 16:38:57 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <signal.h>
 
 struct s_data;
 
@@ -30,11 +31,13 @@ typedef struct s_list
 	struct s_list	*next;
 	int				id;
 	sem_t			*forks;
+	sem_t			*my_print;
 	int				nb_eat;
 	long long		start_time;
 	long long		last_meal;
 	pthread_mutex_t	fork;
 	struct s_data	*data;
+	pid_t 			pid;
 }					t_list;
 
 typedef struct s_data
@@ -72,7 +75,7 @@ void				ft_design(void);
 void				check_death(t_list *phil);
 int					check_digit(int ac, char **av);
 void				ft_destroy(t_list *phil);
-void				my_usleep(long long ms);
+void				my_usleep(long long ms, t_list *phil);
 void				check_optional(t_list *phil);
 
 #endif

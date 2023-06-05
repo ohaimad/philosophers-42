@@ -6,7 +6,7 @@
 /*   By: ohaimad <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 09:04:35 by ohaimad           #+#    #+#             */
-/*   Updated: 2023/05/29 19:31:19 by ohaimad          ###   ########.fr       */
+/*   Updated: 2023/06/04 20:16:57 by ohaimad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,18 @@ void	*rootine(void *p)
 		usleep (100);
 	while (1)
 	{
+		phil->last_meal = current_time_ms();
 		sem_wait(phil->forks);
 		sem_wait(phil->forks);
 		pick_up_forks(phil);
-		phil->last_meal = current_time_ms();
 		print_action(phil, "is eating");
 		check_optional(phil);
-		my_usleep(phil->data->time_to_eat);
+		my_usleep(phil->data->time_to_eat, phil);
+		phil->last_meal = current_time_ms();
 		sem_post(phil->forks);
 		sem_post(phil->forks);
 		print_action(phil, "is sleeping");
-		my_usleep(phil->data->time_to_sleep);
+		my_usleep(phil->data->time_to_sleep, phil);
 		print_action(phil, "is thinking");
 	}
 	return (NULL);
